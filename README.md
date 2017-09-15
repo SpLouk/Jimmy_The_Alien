@@ -1,5 +1,7 @@
 # JIMMY THE ALIEN
 
+![demo](blob/master/demo.gif)
+
 **Be the alien you want to see in the world**
 
 How to run:
