@@ -1,6 +1,6 @@
 # JIMMY THE ALIEN
 
-![demo](blob/master/demo.gif)
+![demo](https://raw.githubusercontent.com/SpLouk/jimmy-the-alien/master/demo.gif)
 
 **Be the alien you want to see in the world**
 
