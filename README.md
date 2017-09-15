@@ -2,7 +2,7 @@
 
 **Be the alien you want to see in the world**
 
-Installation:
+How to run:
 ```
 javac -d build src/com/jimmythealien/*.java
 cd build
