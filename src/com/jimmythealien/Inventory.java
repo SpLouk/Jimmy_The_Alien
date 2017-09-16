@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 public class Inventory {
 
@@ -89,37 +89,6 @@ public class Inventory {
 
 		return false;
 	}
-	
-	protected boolean addItem(Item i, int quant) {
-		boolean b = false;
-
-		for (int a = 0; a < items.length; a++) {
-			if (items[a].item != null
-					&& i.getClass() == items[a].item.getClass()
-					&& items[a].quantity + quant <= 16) {
-				items[a].add(quant);
-				return true;
-			}
-		}
-
-		for (int a = 0; a < items.length; a++) {
-			if (items[a].item == null) {
-				if (selected != a) {
-					changeSlot(a, i, quant);
-					return true;
-				} else {
-					b = true;
-				}
-			}
-		}
-
-		if (b) {
-			changeSlot(selected, i, quant);
-			return true;
-		}
-
-		return false;
-	}
 
 	protected void changeSlot(InventoryItem i, Item i2, int i1) {
 		for (int a = 0; a < items.length; a++) {
@@ -143,39 +112,5 @@ public class Inventory {
 
 		inHand = new InventoryItem(i2, this, i);
 
-	}
-	
-	protected String toFile(){
-		String s = "&";
-		for(int i = 0; i < items.length; i++){
-			if(items[i].item != null){
-				s += items[i].toFile();
-			} else s += "n/";
-		}
-		
-		if(inHand.item != null){
-			s += inHand.toFile();
-		}
-		
-		return s;
-	}
-	
-	protected void fromFile(String args){
-		String[] inv = args.split("/", 0);
-		
-		for(int i = 0; i < inv.length; i++){
-			
-			if(!inv[i].equals("n") && inv[i].indexOf("*") != -1){
-				if(i != inv.length - 1){
-					int item = Integer.parseInt(inv[i].substring(0, inv[i].indexOf("*"))),
-							quantity = Integer.parseInt(inv[i].substring(inv[i].indexOf("*") + 1));
-					items[i] = new InventoryItem(Item.create(item), this, quantity);
-				} else {
-					int item = Integer.parseInt(inv[i].substring(0, inv[i].indexOf("*"))),
-							quantity = Integer.parseInt(inv[i].substring(inv[i].indexOf("*") + 1));
-					inHand = new InventoryItem(Item.create(item), this, quantity);
-				}
-			}
-		}
 	}
 }

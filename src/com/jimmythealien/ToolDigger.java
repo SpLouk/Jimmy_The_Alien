@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,7 +21,7 @@ public class ToolDigger extends Tool {
 			if (Frame.game.leftMouse && p.x == b.getXCord()
 					&& p.y == b.getYCord()) {
 
-				new EntityBlockPiece(loc.x - b.getX(),
+				EntityBlockPiece b1 = new EntityBlockPiece(loc.x - b.getX(),
 						loc.y - b.getY(), tLevel, b);
 
 				if (b.getHardness() > 0 && var1 >= b.getHardness() * 10) {

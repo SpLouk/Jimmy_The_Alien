@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -24,16 +24,13 @@ public class BlockAir extends Object {
 		setPaintLevel((byte) 5);
 	}
 
-	public static void create(int xCord, int yCord, boolean load) {
+	public static void create(int xCord, int yCord, boolean light) {
 		if (xCord < GameData.rightBound && yCord < GameData.worldHeight
 				&& !Block.collision(xCord, yCord, false)
 				&& !collision(xCord, yCord)) {
 
 			BlockAir b = new BlockAir(xCord, yCord);
-			
-			if(load){
-				b.load();
-			}
+			b.load(light);
 		}
 	}
 
@@ -300,9 +297,11 @@ public class BlockAir extends Object {
 		}
 	}
 
-	public void load() {
+	public void load(boolean light) {
 		setLocation(Frame.game.m.cordToPos(this.getXCord(), this.getYCord()));
-		updateLight();
+		if (light) {
+			updateLight();
+		}
 	}
 
 	protected void screenState(boolean b) {

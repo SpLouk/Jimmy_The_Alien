@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 /**
  * 

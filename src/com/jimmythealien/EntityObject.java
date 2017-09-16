@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -8,7 +8,7 @@ public abstract class EntityObject extends Entity {
 	boolean fall = false;
 	protected int vVel = 0, hVel = 0;
 	float int1;
-	Object lCollision, rCollision, uCollision, dCollision;
+	Object hCollision, vCollision;
 
 	public EntityObject() {
 	}
@@ -25,10 +25,10 @@ public abstract class EntityObject extends Entity {
 			fall();
 		}
 
-		if (dCollision instanceof Entity) {
+		if (vCollision instanceof Entity) {
 
 			float temp = int1;
-			Entity e = (Entity) dCollision;
+			Entity e = (Entity) vCollision;
 			int1 = e.getXCord();
 			if (int1 != temp) {
 				moveWithCheck(Math.round((int1 - temp) * 60f), 0);
@@ -40,12 +40,19 @@ public abstract class EntityObject extends Entity {
 
 		for (int i = 0; i < 2; i++) {
 			if (fall) {
-				if (checkCollisionY(vVel) == 1 && vVel > 0
-						&& uCollision instanceof Block) {
-					vVel = 0;
+				if (checkCollisionY(vVel) == 1 && vVel > 0) {
+					if (vCollision instanceof Block) {
+						vVel = 0;
+					} else {
+						vVel -= 1;
+					}
 				}
 
-				moveWithCheck(hVel, vVel);
+				int i1 = moveWithCheck(hVel, vVel).y;
+				if(i1 == 2){
+					vVel = 0;
+				}
+				// Frame.game.formMouseMoved();
 
 				if (vVel > -61) {
 					vVel -= 1;
@@ -53,9 +60,10 @@ public abstract class EntityObject extends Entity {
 
 				if (checkCollisionY(vVel) == 2) {
 					int d;
-					d = dCollision.getY() - getY() - getHeight();
+					d = vCollision.getY() - getY() - getHeight();
 					moveWithCheck(0, -d);
 
+					// Frame.game.formMouseMoved();
 					fall = false;
 					endFall(vVel);
 					vVel = 0;
@@ -68,19 +76,20 @@ public abstract class EntityObject extends Entity {
 	}
 
 	public void placeOnBlock(Block b) {
-		int newX, newY;
+		float newX, newY;
 
-		newX = b.getXCord()*60;
-		newY = b.getYCord()*60;
+		newX = b.getXCord();
+		newY = b.getYCord();
 		setCoordinates(newX, newY);
 		moveEntity(0, getHeight() / 2);
 
 	}
 
 	/*
-	 * The point returned indicates how far the entity was moved. The x
-	 * coordinate indicates the entity's movement on the x axis, y coordinate
-	 * for y axis.
+	 * The point returned is based on whether movement was successful. If the
+	 * returned point is 2, collision was detected and movement was stopped. If
+	 * the returned value of p is 0, movement was succesful. p.x corresponds to
+	 * x movement, p.y corresponds to y movement.
 	 */
 
 	protected Point moveWithCheck(int x, int y) {
@@ -91,74 +100,75 @@ public abstract class EntityObject extends Entity {
 			int i = checkCollisionY(y);
 			if (i == 0) {
 				moveEntity(0, y);
-				p.y = y;
-			} else if (y < 0 && i == 2) {
-				if (dCollision instanceof EntityObject) {
-					EntityLiving e = (EntityLiving) dCollision;
-					int i1 = e.moveWithCheck(0, y/2).y;
-					p.y = moveWithCheck(0, i1).y;
-				}
+			} else if ((y < 0 && i == 2) || (y > 0 && i == 1)){
+				if (vCollision instanceof EntityObject) {
+					EntityLiving e = (EntityLiving) vCollision;
+					int i1 = e.moveWithCheck(0, y).y;
+					if (i1 == 0) {
+						moveEntity(0, y);
+					} else {
+						p.y = 2;
+					}
+					} else {
+						p.y = 2;
+					}
 
-			} else if (y > 0 && i == 1) {
-				if (uCollision instanceof EntityObject) {
-					EntityLiving e = (EntityLiving) uCollision;
-					int i1 = e.moveWithCheck(0, y/2).y;
-					p.y = moveWithCheck(0, i1).y;
-				}
+			} else {
+				p.y = 2;
 			}
-
 		}
 
 		if (x < 0) {
-			if (getXCord() + x > 0) {
+			if (getXCord() + ((float) x / 60f) > 0) {
 				if (checkCollisionX(x) != 2) {
 					moveEntity(x, 0);
-					p.x = x;
-				} else {
-					if (lCollision instanceof EntityLiving) {
-						int newX = x / 2;
-						EntityLiving e = (EntityLiving) lCollision;
-						
-						int i = e.moveWithCheck(newX, 0).x;
-						p.x = moveWithCheck(i, 0).x;
-					} else {
 
-						int newX = lCollision.getX() + lCollision.getWidth()
+				} else {
+					if (hCollision instanceof EntityLiving) {
+						int newX = x / 2;
+						EntityLiving e = (EntityLiving) hCollision;
+						int i = e.moveWithCheck(newX, 0).x;
+						if (i == 0) {
+							moveEntity(newX, 0);
+						}
+					} else {
+						p.x = 2;
+
+						int newX = hCollision.getX() + hCollision.getWidth()
 								- getX();
 
 						moveEntity(newX, 0);
-						p.x = newX;
 					}
 				}
 			} else {
-				p.x = -getXCord();
-				moveEntity(p.x, 0);
+				p.x = 2;
+				moveEntity((int) (-getXCord() * 60), 0);
 			}
 		} else if (x > 0) {
-			int newXCord = getXCord() + getWidth();
+			float newXCord = getXCord() + getWidth() / 60f;
 
-			if (newXCord + x < GameData.rightBound*60) {
+			if (newXCord + ((float) x / 60f) < GameData.rightBound) {
 				if (checkCollisionX(x) != 1) {
 					moveEntity(x, 0);
-					p.x = x;
 
 				} else {
-					if (rCollision instanceof EntityLiving) {
+					if (hCollision instanceof EntityLiving) {
 						int newX = x / 2;
-						EntityLiving e = (EntityLiving) rCollision;
-						
+						EntityLiving e = (EntityLiving) hCollision;
 						int i = e.moveWithCheck(newX, 0).x;
-						p.x = moveWithCheck(i, 0).x;
+						if (i == 0) {
+							moveEntity(newX, 0);
+						}
 					} else {
 						// Frame.game.newDig(false);
-						int newX = rCollision.getX() - getX() - getWidth();
-						p.x = newX;
+						int newX = hCollision.getX() - getX() - getWidth();
+						p.x = 1;
 						moveEntity(newX, 0);
 					}
 				}
 			} else {
-				p.x = GameData.rightBound*60 - newXCord;
-				moveEntity(p.x, 0);
+				p.x = 1;
+				moveEntity((int) ((GameData.rightBound - newXCord) * 60), 0);
 			}
 		}
 
@@ -170,7 +180,7 @@ public abstract class EntityObject extends Entity {
 		Rectangle r1 = getBounds();
 		r1.x += moveSpeed;
 
-		int x = (int) getXCord()/60, y = (int) getYCord()/60, w = (getWidth() / 60) + 1, h = (getHeight() / 60) + 1;
+		int x = (int) getXCord(), y = (int) getYCord(), w = (getWidth() / 60) + 1, h = (getHeight() / 60) + 1;
 
 		if (moveSpeed > 0) {
 			x += 1;
@@ -188,12 +198,12 @@ public abstract class EntityObject extends Entity {
 					if (r2.intersects(r1)) {
 
 						if (r1.x < r2.x) {
-							rCollision = b;
+							hCollision = b;
 							return 1;
 
 							// indicates character has hit left side of a block.
 						} else if (r1.x > r2.x) {
-							lCollision = b;
+							hCollision = b;
 							return 2;
 
 							// indicates character has hit left side of a block.
@@ -211,12 +221,12 @@ public abstract class EntityObject extends Entity {
 				Rectangle r2 = e.getBounds();
 				if (r1.intersects(r2)) {
 					if (r1.x < r2.x) {
-						rCollision = e;
+						hCollision = e;
 						return 1;
 
 						// indicates character has hit left side of a block.
 					} else if (r1.x > r2.x) {
-						lCollision = e;
+						hCollision = e;
 						return 2;
 
 						// indicates character has hit left side of a block.
@@ -226,8 +236,6 @@ public abstract class EntityObject extends Entity {
 			}
 		}
 
-		lCollision = null;
-		rCollision = null;
 		return 0;
 	}
 
@@ -236,7 +244,7 @@ public abstract class EntityObject extends Entity {
 		Rectangle r1 = getBounds();
 		r1.y -= jumpHeight;
 
-		int x = (int) getXCord()/60, y = (int) getYCord()/60, w = (getWidth() / 60) + 1, h = (getHeight() / 60) + 1;
+		int x = (int) getXCord(), y = (int) getYCord(), w = (getWidth() / 60) + 1, h = (getHeight() / 60) + 1;
 
 		if (jumpHeight < 0) {
 			y -= 1;
@@ -255,12 +263,12 @@ public abstract class EntityObject extends Entity {
 
 					if (r1.intersects(r2)) {
 						if (r2.getY() < r1.getY()) {
-							uCollision = b;
+							vCollision = b;
 							return 1;
 							// indicates character has hit head on bottom of
 							// block.
 						} else {
-							dCollision = b;
+							vCollision = b;
 							return 2;
 							// indicates character has landed on top of block.
 						}
@@ -277,15 +285,15 @@ public abstract class EntityObject extends Entity {
 
 				if (r1.intersects(r2)) {
 					if (r2.getY() < r1.getY()) {
-						if (uCollision != e) {
-							uCollision = e;
+						if (vCollision != e) {
+							vCollision = e;
 							int1 = e.getXCord();
 						}
 						return 1;
 						// indicates character has hit head on bottom of block.
 					} else {
-						if (dCollision != e) {
-							dCollision = e;
+						if (vCollision != e) {
+							vCollision = e;
 							int1 = e.getXCord();
 						}
 						return 2;
@@ -295,13 +303,12 @@ public abstract class EntityObject extends Entity {
 			}
 		}
 
-		dCollision = null;
-		uCollision = null;
+		vCollision = null;
 		return 0;
 
 	}
-
-	public String toString() {
+	
+	public String toString(){
 		String s = this.getClass() + ": " + getXCord() + ", " + getYCord();
 		return s;
 	}

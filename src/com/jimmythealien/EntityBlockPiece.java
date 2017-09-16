@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class EntityBlockPiece extends Entity {
 
-	static final int size = 10;
+	final int size = 10;
 	private int hVel, vVel;
 	BufferedImage sprite;
 

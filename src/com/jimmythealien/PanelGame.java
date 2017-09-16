@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -88,48 +88,35 @@ public class PanelGame extends JPanel {
 	}
 
 	public void load() {
+		WorldGen wG = new WorldGen();
+		wG.generateNewWorld();
 		
-		data.load();
+		newJimmy();
+		newJimmy();
 		
 		for (int i = 0; i < data.blockList.size(); i++) {
-			data.blockList.get(i).load();
+			data.blockList.get(i).load(false);
 		}
 
 		for (int i = 0; i < data.airList.size(); i++) {
-			data.airList.get(i).load();
+			data.airList.get(i).load(false);
 		}
 
 		for (int i = 0; i < data.entityList.size(); i++) {
 			if (!data.entityList.get(i).isPlayer()) {
-				data.entityList.get(i).place();
+				data.entityList.get(i).load();
 			}
 
 		}
-		newMenu();
+		
+		m = new ModeMenu();
 		manager = new WorldEvents();
 		lUpdate = GameData.instance().getTime(120);
-		//data.lighting.init();
+		data.lighting.init();
 		gameClock.start();
 		Frame.setShown("Main");
 		requestFocusInWindow();
 
-	}
-	
-	private void newMenu(){
-		for(int i = 0; i < data.entityList.size(); i++){
-			Entity e = data.entityList.get(i);
-			
-			if(e instanceof EntitySentient){
-				EntitySentient e1 = (EntitySentient)e;
-				
-				if(e1.isPlayer){
-					Frame.game.m = new ModeMenu(e1);
-					return;
-				}
-			}
-		}
-		
-		Frame.game.m = new ModeMenu();
 	}
 	
 	EntityJimmy newJimmy(){
@@ -184,7 +171,7 @@ public class PanelGame extends JPanel {
 	}
 
 	private void formMouseReleased(MouseEvent evt) {
-		if (evt.getButton() == 1){
+		if (evt.getButton() == 1) {
 			leftMouse = false;
 		}
 		if (evt.getButton() == 3) {

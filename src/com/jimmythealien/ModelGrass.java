@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,41 +8,45 @@ import java.awt.image.ImageObserver;
 import javax.imageio.ImageIO;
 
 public class ModelGrass extends Model {
-	
+
+	private static boolean init = false;
 	private static BufferedImage grassSprite[] = new BufferedImage[6],
 			grassBase;
 	private int grassSway = 0, grassLoc = 0, updateCount = 0;
 	private boolean swayRight = true;
 
-	static {
-		try {
-			BufferedImage spriteMap = ImageIO.read(GameData.instance().getClass().getResource(
-					"/Resources/Grass.png"));
-
-			grassBase = new BufferedImage(60, 30, spriteMap.getType());
-			Graphics2D g = grassBase.createGraphics();
-			g.drawImage(spriteMap, 0, 0, null);
-
-			for (int b = 1; b < 7; b++) {
-				grassSprite[b - 1] = new BufferedImage(60, 30,
-						spriteMap.getType());
-				g = grassSprite[b - 1].createGraphics();
-				g.drawImage(spriteMap, 0, 0, 60, 30, 60 * b, 0,
-						60 * b + 60, 30, null);
-				g.dispose();
-			}
-		} catch (Exception e) {
-		}
-	}
 	public ModelGrass(EntityGrass eG) {
 		super(eG);
+
+		if (!init) {
+
+			try {
+				BufferedImage spriteMap = ImageIO.read(getClass().getResource(
+						"/Resources/Grass.png"));
+
+				grassBase = new BufferedImage(60, 30, spriteMap.getType());
+				Graphics2D g = grassBase.createGraphics();
+				g.drawImage(spriteMap, 0, 0, null);
+
+				for (int b = 1; b < 7; b++) {
+					grassSprite[b - 1] = new BufferedImage(60, 30,
+							spriteMap.getType());
+					g = grassSprite[b - 1].createGraphics();
+					g.drawImage(spriteMap, 0, 0, 60, 30, 60 * b, 0,
+							60 * b + 60, 30, null);
+					g.dispose();
+				}
+			} catch (Exception e) {
+			}
+			init = true;
+		}
 
 		e.setSize(60, 60);
 
 	}
 
 	@Override
-	protected void onUpdate() {
+	public void update() {
 		int nextUpdate = 0;
 		switch (Frame.game.getWindLevel()) {
 		case 0:

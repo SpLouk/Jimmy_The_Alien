@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,99 +11,96 @@ import javax.imageio.ImageIO;
 public class ModelJimmy extends ModelBiped {
 
 	protected int blink = 0;
-	private static final int bodyWidth = 52, bodyHeight = 52, headWidth = 34,
+	private final int bodyWidth = 52, bodyHeight = 52, headWidth = 34,
 			headHeight = 23, armWidth = 19, armHeight = 35, legWidth = 6,
 			legHeight = 23, footWidth = 16, footHeight = 10,
 			thighY = headHeight + bodyHeight - 10, armY = headHeight
 					+ bodyHeight / 2 - 10, armX = 3;
+	private static boolean init = false;
 	private static BufferedImage bodySprite[] = new BufferedImage[3],
 			headSprite[] = new BufferedImage[11], armSprite, legSprite,
 			footSprite;
 
-	static {
-		try {
-
-			BufferedImage spriteMap = ImageIO.read(GameData.instance().getClass().getResource(
-					"/Resources/jimmyMap.png"));
-
-			for (int b = 0; b < 3; b++) {
-				bodySprite[b] = new BufferedImage(bodyWidth, bodyHeight,
-						spriteMap.getType());
-				Graphics2D g = bodySprite[b].createGraphics();
-
-				g.drawImage(spriteMap, 0, 0, bodyWidth, bodyHeight,
-						bodyWidth * b, 0, bodyWidth * b + bodyWidth,
-						bodyHeight, null);
-				g.dispose();
-			}
-
-			for (int b = 0; b < 6; b++) {
-
-				headSprite[b] = new BufferedImage(headWidth, headHeight,
-						spriteMap.getType());
-				Graphics2D g = headSprite[b].createGraphics();
-
-				g.drawImage(spriteMap, 0, 0, headWidth, headHeight,
-						headWidth * b, bodyHeight, headWidth * b
-								+ headWidth, bodyHeight + headHeight, null);
-				g.dispose();
-			}
-
-			for (int b = 0; b < 5; b++) {
-
-				headSprite[b + 6] = new BufferedImage(headWidth,
-						headHeight, spriteMap.getType());
-				Graphics2D g = headSprite[b + 6].createGraphics();
-
-				g.drawImage(spriteMap, 0, 0, headWidth, headHeight,
-						headWidth * b, bodyHeight + headHeight, headWidth
-								* b + headWidth, bodyHeight + headHeight
-								* 2, null);
-				g.dispose();
-			}
-
-			armSprite = new BufferedImage(armWidth, armHeight,
-					spriteMap.getType());
-			Graphics2D g = armSprite.createGraphics();
-
-			g.drawImage(spriteMap, 0, 0, armWidth, armHeight,
-					(bodyWidth * 3), 0, armWidth + (bodyWidth * 3),
-					armHeight, null);
-			g.dispose();
-
-			legSprite = new BufferedImage(legWidth, legHeight,
-					spriteMap.getType());
-			g = legSprite.createGraphics();
-
-			g.drawImage(spriteMap, 0, 0, legWidth, legHeight, bodyWidth * 3
-					+ armWidth, 0, legWidth + armWidth + (bodyWidth * 3),
-					legHeight, null);
-			g.dispose();
-
-			footSprite = new BufferedImage(footWidth, footHeight,
-					spriteMap.getType());
-			g = footSprite.createGraphics();
-
-			g.drawImage(spriteMap, 0, 0, footWidth, footHeight, armWidth
-					+ legWidth + (bodyWidth * 3), 0, armWidth + legWidth
-					+ footWidth + (bodyWidth * 3), footHeight, null);
-			g.dispose();
-
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-	}
-	
 	public ModelJimmy(EntityJimmy j) {
 		super(j);
-			
+
+		if (!init) {
+			try {
+
+				BufferedImage spriteMap = ImageIO.read(getClass().getResource(
+						"/Resources/jimmyMap.png"));
+
+				for (int b = 0; b < 3; b++) {
+					bodySprite[b] = new BufferedImage(bodyWidth, bodyHeight,
+							spriteMap.getType());
+					Graphics2D g = bodySprite[b].createGraphics();
+
+					g.drawImage(spriteMap, 0, 0, bodyWidth, bodyHeight,
+							bodyWidth * b, 0, bodyWidth * b + bodyWidth,
+							bodyHeight, null);
+					g.dispose();
+				}
+
+				for (int b = 0; b < 6; b++) {
+
+					headSprite[b] = new BufferedImage(headWidth, headHeight,
+							spriteMap.getType());
+					Graphics2D g = headSprite[b].createGraphics();
+
+					g.drawImage(spriteMap, 0, 0, headWidth, headHeight,
+							headWidth * b, bodyHeight, headWidth * b
+									+ headWidth, bodyHeight + headHeight, null);
+					g.dispose();
+				}
+
+				for (int b = 0; b < 5; b++) {
+
+					headSprite[b + 6] = new BufferedImage(headWidth,
+							headHeight, spriteMap.getType());
+					Graphics2D g = headSprite[b + 6].createGraphics();
+
+					g.drawImage(spriteMap, 0, 0, headWidth, headHeight,
+							headWidth * b, bodyHeight + headHeight, headWidth
+									* b + headWidth, bodyHeight + headHeight
+									* 2, null);
+					g.dispose();
+				}
+
+				armSprite = new BufferedImage(armWidth, armHeight,
+						spriteMap.getType());
+				Graphics2D g = armSprite.createGraphics();
+
+				g.drawImage(spriteMap, 0, 0, armWidth, armHeight,
+						(bodyWidth * 3), 0, armWidth + (bodyWidth * 3),
+						armHeight, null);
+				g.dispose();
+
+				legSprite = new BufferedImage(legWidth, legHeight,
+						spriteMap.getType());
+				g = legSprite.createGraphics();
+
+				g.drawImage(spriteMap, 0, 0, legWidth, legHeight, bodyWidth * 3
+						+ armWidth, 0, legWidth + armWidth + (bodyWidth * 3),
+						legHeight, null);
+				g.dispose();
+
+				footSprite = new BufferedImage(footWidth, footHeight,
+						spriteMap.getType());
+				g = footSprite.createGraphics();
+
+				g.drawImage(spriteMap, 0, 0, footWidth, footHeight, armWidth
+						+ legWidth + (bodyWidth * 3), 0, armWidth + legWidth
+						+ footWidth + (bodyWidth * 3), footHeight, null);
+				g.dispose();
+
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+			init = true;
+		}
 
 		e.setSize(bodyWidth, headHeight + bodyHeight + legHeight * 2
 				+ footHeight - 20);
-	}
-	
-	protected void onUpdate(){
-		calculateAngs();
 	}
 
 	public void blink() {
@@ -112,8 +109,6 @@ public class ModelJimmy extends ModelBiped {
 			blink = 1;
 		}
 	}
-	
-	
 
 	public void paintComponent(Graphics g, ImageObserver io) {
 
@@ -171,6 +166,8 @@ public class ModelJimmy extends ModelBiped {
 				break;
 			}
 		}
+
+		calculateAngs();
 
 		switch (getOrientation()) {
 		case 0: // facing left

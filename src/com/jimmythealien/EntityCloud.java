@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -8,18 +8,22 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class EntityCloud extends Entity{
-	
+
+	private static boolean init = false;
 	static BufferedImage cloud;
 	private int vel = 0;
 	
-	static {
-		try {
-			cloud = ImageIO.read(GameData.instance().getClass().getResource("/Resources/cloud.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	public EntityCloud(){
+		
+		if(!init){
+			
+			try {
+				cloud = ImageIO.read(getClass().getResource("/Resources/cloud.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			init = true;
+		}
 		
 		Random r = new Random();
 		int x =  - 20, y = r.nextInt(90) + 100;

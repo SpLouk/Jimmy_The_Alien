@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 import java.util.Random;
@@ -25,7 +25,7 @@ public class WorldEvents {
 		
 		if (GameData.instance().isTime(cSpawn)) {
 			
-			new EntityCloud();
+			EntityCloud c = new EntityCloud();
 			
 			Random r = new Random();
 			cSpawn = GameData.instance().getTime(120 + r.nextInt(120));

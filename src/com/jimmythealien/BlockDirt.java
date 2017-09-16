@@ -1,10 +1,10 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 
 public class BlockDirt extends Block {
-	
-	EntityFlora e = null;
+
+	EntityGrass e = null;
 	Point p = new Point(0, 1);
 
 	public BlockDirt(short xCord, short yCord) {
@@ -23,28 +23,15 @@ public class BlockDirt extends Block {
 	}
 
 	public void growGrass(boolean b) {
-		if (e == null) {
-			e = new EntityGrass(this);
-			p = new Point(1, 1);
+		e = new EntityGrass(this);
+		p = new Point(1, 1);
 
-			if (b) {
-				updateLight();
-			}
+		if (b) {
+			updateLight();
 		}
 	}
 
-	public void growFlora(boolean b, EntityFlora e1) {
-		if (e == null) {
-			e = e1;
-			p = new Point(1, 1);
-
-			if (b) {
-				updateLight();
-			}
-		}
-	}
-
-	public void removeFlora() {
+	public void removeGrass() {
 		e.remove();
 		e = null;
 		p = new Point(0, 1);

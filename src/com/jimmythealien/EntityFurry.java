@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 import java.util.Random;
@@ -65,17 +65,13 @@ public class EntityFurry extends EntityLiving {
 				moveInt = 1;
 			}
 		} else {
-			Random r = new Random();
-			Entity e = null;
-			
-			int i = r.nextInt(GameData.instance().entityList.size());
-			e = GameData.instance().entityList.get(i);
-			if (e instanceof EntityLiving && !(e instanceof EntityFurry)) {
-				entityNum = i;
-				target = (EntityLiving) e;
+			for(int i = 0; i < GameData.instance().entityList.size(); i++){
+				Entity e = GameData.instance().entityList.get(i);
+				
+				if(e instanceof EntityLiving && !(e instanceof EntityFurry) && canSee(e)){
+					target = (EntityLiving)e;
+				}
 			}
-
-			moveInt = 0;
 		}
 
 		switch (moveInt) {
@@ -95,13 +91,9 @@ public class EntityFurry extends EntityLiving {
 			target = null;
 		}
 		
-		if (target != null && attackReady && dCollision == target) {
+		if (target != null && attackReady && vCollision == target) {
 			 target.addHealth(-damage);
 			attackReady = false;
 		}
-	}
-	
-	EntitySaveable newEntity(){
-		return new EntityFurry();
 	}
 }

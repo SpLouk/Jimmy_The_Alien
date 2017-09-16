@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,7 +20,7 @@ public class Model {
 		this.e = e;
 	}
 
-	protected void onUpdate() {
+	public void update() {
 
 	}
 

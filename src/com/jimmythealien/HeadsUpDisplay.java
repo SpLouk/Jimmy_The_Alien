@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -17,85 +17,88 @@ public class HeadsUpDisplay {
 
 	static BufferedImage rGradient, inv, invSlot, select;
 	BufferedImage inv2, healthPlate;
+	static boolean init = false;
 
-	protected int selX = 24, invY, slot, slot2, health, slotX, slotY;
-	protected boolean invShow, isSlot;
+	protected int selX = 24, invY, slot, slot2, health;
+	protected boolean invShow;
 	EntitySentient entity;
 
-	static {
-		Color[] colors = { new Color(0, 0, 0, 0), new Color(0, 0, 0, 0.05f) };
-		float[] dist = { 0.9f, 1f };
-		int radius = 200;
-		Point2D center = new Point(200, 200);
-		RadialGradientPaint paint = new RadialGradientPaint(center, radius,
-				dist, colors);
-		rGradient = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = (Graphics2D) rGradient.getGraphics();
-		g.setPaint(paint);
-		g.fillOval(0, 0, 400, 400);
+	public HeadsUpDisplay(EntitySentient e1) {
 
-		g.dispose();
+		if (!init) {
+			Color[] colors = { new Color(0, 0, 0, 0), new Color(0, 0, 0, 0.05f) };
+			float[] dist = { 0.9f, 1f };
+			int radius = 200;
+			Point2D center = new Point(200, 200);
+			RadialGradientPaint paint = new RadialGradientPaint(center, radius,
+					dist, colors);
+			rGradient = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = (Graphics2D) rGradient.getGraphics();
+			g.setPaint(paint);
+			g.fillOval(0, 0, 400, 400);
 
-		inv = new BufferedImage(60 * 9 + 30 + 10 * 8, 60 + 30,
-				BufferedImage.TYPE_INT_ARGB);
-		g = (Graphics2D) inv.getGraphics();
+			g.dispose();
 
-		AlphaComposite a;
-		g.setColor(Color.black);
-		for (int i = 0; i < 10; i++) {
-			a = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-					(float) i / 500);
+			inv = new BufferedImage(60 * 9 + 30 + 10 * 8, 60 + 30,
+					BufferedImage.TYPE_INT_ARGB);
+			g = (Graphics2D) inv.getGraphics();
+
+			AlphaComposite a;
+			g.setColor(Color.black);
+			for (int i = 0; i < 10; i++) {
+				a = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+						(float) i / 500);
+				g.setComposite(a);
+				g.fillRect(i, i, inv.getWidth() - 2 * i, inv.getHeight() - 2
+						* i);
+			}
+			a = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
 			g.setComposite(a);
-			g.fillRect(i, i, inv.getWidth() - 2 * i, inv.getHeight() - 2
-					* i);
-		}
-		a = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-		g.setComposite(a);
 
-		GradientPaint gp = new GradientPaint(0, 0, new Color(0, 0, 0, 0),
-				0, inv.getHeight(), new Color(0, 0, 0, 0.15f));
+			GradientPaint gp = new GradientPaint(0, 0, new Color(0, 0, 0, 0),
+					0, inv.getHeight(), new Color(0, 0, 0, 0.15f));
 
-		g.setColor(new Color(193, 218, 214));
-		g.fillRect(10, 10, inv.getWidth() - 20, inv.getHeight() - 20);
-		g.setPaint(gp);
-		g.fillRect(10, 10, inv.getWidth() - 20, inv.getHeight() - 20);
+			g.setColor(new Color(193, 218, 214));
+			g.fillRect(10, 10, inv.getWidth() - 20, inv.getHeight() - 20);
+			g.setPaint(gp);
+			g.fillRect(10, 10, inv.getWidth() - 20, inv.getHeight() - 20);
 
-		for (int i = 0; i < 9; i++) {
+			for (int i = 0; i < 9; i++) {
+
+				g.setColor(new Color(230, 231, 231));
+				g.fillRect(15 + 10 * i + 60 * (i), 15, 60, 60);
+				g.setColor(new Color(168, 190, 186));
+				g.drawRect((15 + 10 * i + 60 * (i)) - 1, 14, 61, 61);
+			}
+
+			g.dispose();
+
+			invSlot = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
+			g = (Graphics2D) invSlot.getGraphics();
+
+			g.setColor(new Color(165, 186, 183));
+			g.fillRect(0, 0, inv.getWidth(), inv.getHeight());
 
 			g.setColor(new Color(230, 231, 231));
-			g.fillRect(15 + 10 * i + 60 * (i), 15, 60, 60);
-			g.setColor(new Color(168, 190, 186));
-			g.drawRect((15 + 10 * i + 60 * (i)) - 1, 14, 61, 61);
+			g.fillRect(5, 5, 60, 60);
+
+			g.dispose();
+
+			select = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
+			g = (Graphics2D) select.getGraphics();
+			g.setColor(Color.black);
+			g.drawRect(0, 0, 69, 69);
+			g.drawRect(5, 5, 59, 59);
+			g.setColor(Color.white);
+			g.drawRect(1, 1, 67, 67);
+			g.drawRect(2, 2, 65, 65);
+			g.drawRect(3, 3, 63, 63);
+			g.drawRect(4, 4, 61, 61);
+
+			g.dispose();
+
+			init = true;
 		}
-
-		g.dispose();
-
-		invSlot = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
-		g = (Graphics2D) invSlot.getGraphics();
-
-		g.setColor(new Color(165, 186, 183));
-		g.fillRect(0, 0, inv.getWidth(), inv.getHeight());
-
-		g.setColor(new Color(230, 231, 231));
-		g.fillRect(5, 5, 60, 60);
-
-		g.dispose();
-
-		select = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
-		g = (Graphics2D) select.getGraphics();
-		g.setColor(Color.black);
-		g.drawRect(0, 0, 69, 69);
-		g.drawRect(5, 5, 59, 59);
-		g.setColor(Color.white);
-		g.drawRect(1, 1, 67, 67);
-		g.drawRect(2, 2, 65, 65);
-		g.drawRect(3, 3, 63, 63);
-		g.drawRect(4, 4, 61, 61);
-
-		g.dispose();
-	}
-	
-	public HeadsUpDisplay(EntitySentient e1) {
 
 		entity = e1;
 
@@ -129,10 +132,15 @@ public class HeadsUpDisplay {
 		} else {
 			invShow = false;
 		}
-		
+	}
+
+	protected void mouseClicked(java.awt.event.MouseEvent evt) {
+
 		if (invShow) {
 			Rectangle r1 = new Rectangle(25, 25, inv.getWidth() - 20,
 					inv.getHeight() - 20);
+			boolean b = false;
+			int slot = 0;
 
 			if (r1.contains(evt.getPoint())) {
 				for (int i = 0; i < 9; i++) {
@@ -140,12 +148,8 @@ public class HeadsUpDisplay {
 							60);
 
 					if (r.contains(evt.getPoint())) {
-						this.slot = i;
-						
-						slotX = r.x;
-						slotY = r.y;
-						isSlot = true;
-						return;
+						b = true;
+						slot = i;
 					}
 				}
 
@@ -159,33 +163,20 @@ public class HeadsUpDisplay {
 							* (a / 9), 60, 60);
 
 					if (r.contains(evt.getPoint())) {
-						this.slot = a;
-						
-						slotX = r.x;
-						slotY = r.y;
-						isSlot = true;
-						return;
+						b = true;
+						slot = a;
 					}
 
 				}
 			}
-		}
-		
-		isSlot = false;
-	}
 
-	protected void mouseClicked(java.awt.event.MouseEvent evt) {
-
-		if (isSlot) {
-			if (entity.inventory.inHand.item == null) {
-				pickUp(evt.getButton());
-			} else {
-				drop(evt.getButton());
-			}
-		} else if (entity.inventory.inHand.item != null) {
-			
-			if(entity.inventory.addItem(entity.inventory.inHand.item, entity.inventory.inHand.quantity)){
-				entity.inventory.inHand.remove();
+			if (b) {
+				this.slot = slot;
+				if (entity.inventory.inHand.item == null) {
+					pickUp(evt.getButton());
+				} else {
+					drop(evt.getButton());
+				}
 			}
 		}
 	}
@@ -383,23 +374,12 @@ public class HeadsUpDisplay {
 		g.drawImage(select, selX, 25, null);
 
 		if (entity.inventory.inHand.item != null) {
-			if (isSlot && entity.inventory.items[slot].item == null) {
-				BufferedImage b = entity.inventory.inHand.item.getImg();
-				g.drawImage(b, slotX,
-						slotY, null);
-				g.setColor(Color.white);
-				g.drawString(entity.inventory.inHand.quantity + "",
-						slotX + 5,
-						slotY + 50);
-			} else {
-				BufferedImage b = entity.inventory.inHand.item.getImg();
-				g.drawImage(b, Frame.game.mouseLoc.x - 30,
-						Frame.game.mouseLoc.y - 30, null);
-				g.setColor(Color.white);
-				g.drawString(entity.inventory.inHand.quantity + "",
-						Frame.game.mouseLoc.x - 25,
-						Frame.game.mouseLoc.y - 30 + 50);
-			}
+			BufferedImage b = entity.inventory.inHand.item.getImg();
+			g.drawImage(b, Frame.game.mouseLoc.x - 30,
+					Frame.game.mouseLoc.y - 30, null);
+			g.setColor(Color.white);
+			g.drawString(entity.inventory.inHand.quantity + "",
+					Frame.game.mouseLoc.x - 25, Frame.game.mouseLoc.y - 30 + 50);
 		}
 
 	}

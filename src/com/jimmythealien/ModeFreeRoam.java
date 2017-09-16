@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,9 +6,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class ModeFreeRoam extends Mode {
-	
-	public ModeFreeRoam(){
-	}
 
 	private int moveX = 0, moveY = 0;
 	private static final int maxSpeed = 104;
@@ -37,9 +34,7 @@ public class ModeFreeRoam extends Mode {
 		}
 		
 		if (evt.getKeyCode() == 32) {
-			EntityJimmy e1 = Frame.game.newJimmy();
-			e1.place();
-			Frame.game.m = new ModePlayer(e1);
+			Frame.game.newJimmy().load();
 		}
 	}
 

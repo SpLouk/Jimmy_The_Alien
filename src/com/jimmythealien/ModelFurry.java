@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,67 +10,66 @@ import javax.imageio.ImageIO;
 
 public class ModelFurry extends ModelBiped {
 
-	private static final int bodyWidth = 30, bodyHeight = 30, armWidth = 7,
+	private final int bodyWidth = 30, bodyHeight = 30, armWidth = 7,
 			legWidth = 5, legHeight = 10, footWidth = 9, footHeight = 4,
 			thighY = bodyHeight - 3;
+	private static boolean init = false;
 	private static BufferedImage bodySprite[] = new BufferedImage[3],
 			legSprite, footSprite;
 
-	
-	static {
-		try {
-
-			BufferedImage spriteMap = ImageIO.read(GameData.instance().getClass().getResource(
-					"/Resources/furryMap.png"));
-
-			for (int b = 0; b < 3; b++) {
-				bodySprite[b] = new BufferedImage(bodyWidth, bodyHeight,
-						spriteMap.getType());
-				Graphics2D g = bodySprite[b].createGraphics();
-
-				g.drawImage(spriteMap, 0, 0, bodyWidth, bodyHeight,
-						bodyWidth * b, 0, bodyWidth * b + bodyWidth,
-						bodyHeight, null);
-				g.dispose();
-			}
-
-			legSprite = new BufferedImage(legWidth, legHeight,
-					spriteMap.getType());
-			Graphics2D g = legSprite.createGraphics();
-
-			g.drawImage(spriteMap, 0, 0, legWidth, legHeight, bodyWidth * 3
-					+ armWidth, 0, legWidth + armWidth + (bodyWidth * 3),
-					legHeight, null);
-			g.dispose();
-
-			footSprite = new BufferedImage(footWidth, footHeight,
-					spriteMap.getType());
-			g = footSprite.createGraphics();
-
-			g.drawImage(spriteMap, 0, 0, footWidth, footHeight, armWidth
-					+ legWidth + (bodyWidth * 3), 0, armWidth + legWidth
-					+ footWidth + (bodyWidth * 3), footHeight, null);
-			g.dispose();
-
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-	}
-	
 	public ModelFurry(EntityFurry e1) {
 		super(e1);
+
+		if (!init) {
+			try {
+
+				BufferedImage spriteMap = ImageIO.read(getClass().getResource(
+						"/Resources/furryMap.png"));
+
+				for (int b = 0; b < 3; b++) {
+					bodySprite[b] = new BufferedImage(bodyWidth, bodyHeight,
+							spriteMap.getType());
+					Graphics2D g = bodySprite[b].createGraphics();
+
+					g.drawImage(spriteMap, 0, 0, bodyWidth, bodyHeight,
+							bodyWidth * b, 0, bodyWidth * b + bodyWidth,
+							bodyHeight, null);
+					g.dispose();
+				}
+
+				legSprite = new BufferedImage(legWidth, legHeight,
+						spriteMap.getType());
+				Graphics2D g = legSprite.createGraphics();
+
+				g.drawImage(spriteMap, 0, 0, legWidth, legHeight, bodyWidth * 3
+						+ armWidth, 0, legWidth + armWidth + (bodyWidth * 3),
+						legHeight, null);
+				g.dispose();
+
+				footSprite = new BufferedImage(footWidth, footHeight,
+						spriteMap.getType());
+				g = footSprite.createGraphics();
+
+				g.drawImage(spriteMap, 0, 0, footWidth, footHeight, armWidth
+						+ legWidth + (bodyWidth * 3), 0, armWidth + legWidth
+						+ footWidth + (bodyWidth * 3), footHeight, null);
+				g.dispose();
+
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+			init = true;
+		}
 
 		e.setSize(bodyWidth, bodyHeight + legHeight * 2 + footHeight - 9);
 	}
 
-	protected void onUpdate(){
-		calculateAngs();
-	}
-	
 	public void paintComponent(Graphics g, ImageObserver io) {
 
 		Point p, p1;
-		
+
+		calculateAngs();
+
 		switch (getOrientation()) {
 		case 0: // facing left
 

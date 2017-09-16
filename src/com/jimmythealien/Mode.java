@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -220,27 +220,6 @@ public class Mode {
 		newY = (p.y - yPos) / 60;
 
 		return new Point((int) newX, (int) newY);
-	}
-	
-	public Point eCordToPos(int xCord, int yCord) {
-
-		Block b = GameData.instance().blockMap[0][0];
-		int newX = b.getX() + xCord;
-		int newY = b.getY() - yCord;
-
-		return new Point(newX, newY);
-
-	}
-
-	public Point ePosToCord(int xPos, int yPos) {
-		int newX, newY;
-
-		Point p = eCordToPos(0, 0);
-
-		newX = xPos - p.x;
-		newY = p.y - yPos;
-
-		return new Point(newX, newY);
 	}
 
 	public void onUpdate() {

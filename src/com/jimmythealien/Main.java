@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+import jimmyTheAlien.Frame;
 
 
 public class Main {

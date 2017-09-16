@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -6,29 +6,31 @@ import java.awt.Rectangle;
 
 public abstract class Entity extends Object {
 
+	private float xCord, yCord;
+
 	public Entity() {
 		setPaintLevel((byte) 3);
 		GameData.instance().entityList.add(this);
 	}
-	
 
-	public Entity(int x, int y) {
-		setCoordinates(x, y);
+	public Entity(float f, float f1) {
+		xCord = f;
+		yCord = f1;
 		GameData.instance().entityList.add(this);
 	}
 
 	public void onUpdate() {
-		if (yCord2 < 0) {
-			System.out.println(yCord2);
+		if (yCord < 0) {
+			System.out.println(yCord);
 		}
 	}
 
-	public int getXCord() {
-		return xCord2;
+	public float getXCord() {
+		return xCord;
 	}
 
-	public int getYCord() {
-		return yCord2;
+	public float getYCord() {
+		return yCord;
 	}
 
 	public boolean isPlayer() {
@@ -43,14 +45,14 @@ public abstract class Entity extends Object {
 		return false;
 	}
 
-	public void setCoordinates(int x, int y) {
-		xCord2 = x;
-		yCord2 = y;
+	public void setCoordinates(float x, float y) {
+		xCord = x;
+		yCord = y;
 	}
 	
 	public void setCoordinates(Point p) {
-		xCord2 = p.x;
-		yCord2 = p.y;
+		xCord = p.x;
+		yCord = p.y;
 	}
 	
 	public static Entity collision(Point p){
@@ -72,19 +74,18 @@ public abstract class Entity extends Object {
 
 	public void moveEntity(int x, int y) {
 		setLocation(getX() + x, getY() - y);
-		setCoordinates(getXCord() + x, getYCord() + y);
+		setCoordinates(getXCord() + (float) x / 60, getYCord() + (float) y / 60);
 	}
 
-	public void place() {
-		setLocation(Frame.game.m.eCordToPos(getXCord(), getYCord()));
+	public void load() {
+
+		setLocation(Frame.game.m.cordToPos(getXCord(), getYCord()));
 	}
 
-	public Entity remove() {
+	public void remove() {
 		GameData.instance().entityList.remove(this);
-		return this;
 	}
-	
-	
+
 	public abstract void paintComponent(Graphics g);
 
 }

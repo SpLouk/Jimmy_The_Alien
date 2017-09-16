@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 public class InventoryItem {
 
@@ -74,9 +74,5 @@ public class InventoryItem {
 		}
 
 		return i1;
-	}
-	
-	protected String toFile(){
-		return item.getInt() + "*" + quantity + "/";
 	}
 }

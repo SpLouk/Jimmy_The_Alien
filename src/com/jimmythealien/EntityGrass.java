@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,16 +9,16 @@ import java.util.Random;
  * 
  * @author david
  */
-public class EntityGrass extends EntityFlora {
-	
+public class EntityGrass extends EntityObject {
+
+	short x1, y1;
 	byte grassHeight = 10, i2 = 0;
 	boolean b1 = false, b2 = false;
 	Point[] p1 = new Point[6], p2 = new Point[6];
+	Point spread = GameData.instance().getTime(2400);
 
 	public EntityGrass(Block b) {
 
-		grow = GameData.instance().getTime(2400);
-		
 		for (int i = 0; i < p1.length; i++) {
 			p1[i] = new Point(0, 0);
 			p2[i] = new Point(0, 0);
@@ -29,56 +29,24 @@ public class EntityGrass extends EntityFlora {
 		placeOnBlock(b);
 		setPaintLevel((byte) 2);
 
-		blockX = b.getXCord();
-		blockY = b.getYCord();
+		x1 = b.getXCord();
+		y1 = b.getYCord();
 
-		this.place();
-	}
-	
-	public EntityGrass(Block b, boolean b1) {
-
-		for (int i = 0; i < p1.length; i++) {
-			p1[i] = new Point(0, 0);
-			p2[i] = new Point(0, 0);
-
-		}
-
-		setSize(60, 60);
-		placeOnBlock(b);
-		setPaintLevel((byte) 2);
-
-		blockX = b.getXCord();
-		blockY = b.getYCord();
-
-		if(b1){
-			this.place();
-		}
-	}
-	
-	public EntityGrass() {
-		for (int i = 0; i < p1.length; i++) {
-			p1[i] = new Point(0, 0);
-			p2[i] = new Point(0, 0);
-
-		}
-
-		setSize(60, 60);
-		setPaintLevel((byte) 2);
+		this.load();
 	}
 
 	@Override
 	public void onUpdate() {
 
-		if (GameData.instance().isTime(grow)) {
+		if (GameData.instance().isTime(spread)) {
 			Random r = new Random();
-			grow = GameData.instance().getTime(2400 + r.nextInt(2400));
+			spread = GameData.instance().getTime(2400 + r.nextInt(2400));
 			spread();
 
 		}
-		if (Block.collision(blockX, blockY + 1, false)) {
-			System.out.println(blockX + ", " + blockY);
-			BlockDirt b = (BlockDirt) Block.getBlock(blockX, blockY);
-			b.removeFlora();
+		if (Block.collision(x1, y1 + 1, false)) {
+			BlockDirt b = (BlockDirt) Block.getBlock(x1, y1);
+			b.removeGrass();
 		}
 
 		int i1 = GameData.instance().windLevel;
@@ -112,9 +80,9 @@ public class EntityGrass extends EntityFlora {
 	private void spread() {
 		for (int iX = -1; iX < 2; iX += 2) {
 			for (int iY = -1; iY < 2; iY++) {
-				Block b = Block.getBlock(blockX + iX, blockY + iY);
+				Block b = Block.getBlock(x1 + iX, y1 + iY);
 				if (b != null && b.getBlockType().equals("Dirt")
-						&& Block.getBlock(blockX + iX, blockY + iY + 1) == null) {
+						&& Block.getBlock(x1 + iX, y1 + iY + 1) == null) {
 					BlockDirt d = (BlockDirt) b;
 					if (d.e == null) {
 						d.growGrass(true);
@@ -138,8 +106,8 @@ public class EntityGrass extends EntityFlora {
 
 	}
 
-	public void place() {
-		super.place();
+	public void load() {
+		super.load();
 
 		for (int i = 0; i < p1.length; i++) {
 			int x = getX() + (10 * i);
@@ -158,10 +126,6 @@ public class EntityGrass extends EntityFlora {
 			g.drawLine(p1[i].x, p1[i].y, p2[i].x, p2[i].y);
 		}
 
-	}
-	
-	EntitySaveable newEntity() {
-		return new EntityGrass();
 	}
 
 }

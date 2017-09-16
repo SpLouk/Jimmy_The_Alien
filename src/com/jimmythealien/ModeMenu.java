@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,7 +14,6 @@ public class ModeMenu extends Mode {
 	EntityLiving e;
 	int a = 0, hMove, vMove;
 	BufferedImage menu;
-	final boolean lock;
 
 	public ModeMenu() {
 		e = getLivingEntity();
@@ -33,57 +32,29 @@ public class ModeMenu extends Mode {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
-		lock = false;
-	}
-	
-	public ModeMenu(EntitySentient e2) {
-		e = e2;
-
-		int x = Frame.game.getWidth() / 2 - e.getX();
-		int y = -e.getY();
-
-		move(x, y);
-
-		Random r = new Random();
-		hMove = r.nextInt(9) - 4;
-		vMove = r.nextInt(9) - 4;
-
-		try {
-			menu = ImageIO.read(getClass().getResource("/Resources/0.5.png"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		lock = true;
 	}
 
 	@Override
 	public void onUpdate() {
-		
+
 		if (Frame.game.keys[32]) {
-			if(lock){
-				Frame.game.m = new ModePlayer((EntitySentient)e);
-			} else {
-			for(int i = 0; i < GameData.instance().entityList.size(); i++){
-				Entity e = GameData.instance().entityList.get(i);
-				
-				if(e instanceof EntitySentient){
-					Frame.game.m = new ModePlayer((EntitySentient)e);
-					return;
+
+			Entity e = null;
+			boolean loop = true;
+			while (loop) {
+				Random r = new Random();
+				e = GameData.instance().entityList.get(r.nextInt(GameData
+						.instance().entityList.size()));
+				if (e instanceof EntitySentient) {
+					Frame.game.m = new ModePlayer((EntitySentient) e);
+					loop = false;
 				}
 			}
-			
-			Frame.game.m = new ModeFreeRoam();
-			return;
 
-			}
 		}
 
 		if (a == 100) {
-			if(!lock){
 			e = getLivingEntity();
-			}
 
 			int x = Frame.game.getWidth() / 2 - e.getX();
 			int y = Frame.game.getHeight() / 2 - e.getY();

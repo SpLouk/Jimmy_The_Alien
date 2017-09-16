@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 import java.util.Random;
@@ -121,20 +121,5 @@ public class EntityJimmy extends EntitySentient {
 			}
 			break;
 		}
-	}
-	
-	public String toFile(){
-		
-		return super.toFile() + "&" + blink.x + "&" + blink.y;
-	}
-	
-	protected void fromFile(String[] args){
-		super.fromFile(args);
-		
-		blink = new Point(Integer.parseInt(args[9]), Integer.parseInt(args[10]));
-	}
-	
-	EntitySaveable newEntity(){
-		return new EntityJimmy();
 	}
 }

@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 public class ItemStone extends ItemBlock {
 
@@ -6,10 +6,6 @@ public class ItemStone extends ItemBlock {
 		return new ToolBlock(this, i);
 	}
 
-	protected Item newItem(){
-		return new ItemStone();
-	}
-	
 	protected Block getBlock() {
 		return Block.blocks[1];
 	}

@@ -1,10 +1,10 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 
-public abstract class EntityLiving extends EntitySaveable {
+public abstract class EntityLiving extends EntityObject {
 
 	private Point heal;
 	public static final int BEH_PASSIVE = 0, BEH_NEUTRAL = 1,
@@ -30,7 +30,6 @@ public abstract class EntityLiving extends EntitySaveable {
 	}
 	
 	public void onUpdate(){
-		model.onUpdate();
 		super.onUpdate();
 		
 		if (GameData.instance().isTime(heal)) {
@@ -43,8 +42,6 @@ public abstract class EntityLiving extends EntitySaveable {
 		} else if (health == maxHealth){
 			heal = new Point(0, 0);
 		}
-		
-		
 	}
 
 	public void setModel(Model m) {
@@ -54,7 +51,7 @@ public abstract class EntityLiving extends EntitySaveable {
 	protected void addHealth(int i) {
 		
 		if(i < 0){
-			new EntityDamageValue(getX() + getWidth()/2, getY(), i);
+			EntityDamageValue e = new EntityDamageValue(getX() + getWidth()/2, getY(), i);
 		}
 		
 		i += health;
@@ -86,14 +83,14 @@ public abstract class EntityLiving extends EntitySaveable {
 			}
 		}
 		
-		place();
+		load();
 	}
 
 	public void placeOnBlock(Block b) {
-		int newX, newY;
+		float newX, newY;
 
-		newX = b.getXCord()*60 + (b.getWidth() / 2) - (getWidth() / 2);
-		newY = b.getYCord()*60;
+		newX = b.getXCord() + (float) (b.getWidth() / 2 - getWidth() / 2) / 60;
+		newY = b.getYCord();
 		setCoordinates(newX, newY);
 		moveEntity(0, getHeight());
 	}
@@ -123,7 +120,7 @@ public abstract class EntityLiving extends EntitySaveable {
 
 		int i = moveWithCheck(-moveSpeed, 0).x;
 
-		if (i < 0) {
+		if (i == 0) {
 			model.setActInt(1);
 
 			model.setOrientation(0);
@@ -138,7 +135,7 @@ public abstract class EntityLiving extends EntitySaveable {
 
 		int i = moveWithCheck(moveSpeed, 0).x;
 
-		if (i > 0) {
+		if (i == 0) {
 			model.setActInt(1);
 
 			model.setOrientation(2);
@@ -171,12 +168,12 @@ public abstract class EntityLiving extends EntitySaveable {
 	}
 	
 	protected boolean canSee(Entity e){
-		int x = getXCord() - e.getXCord();
-		int y = getYCord() - e.getYCord();
+		float x = getXCord() - e.getXCord();
+		float y = getYCord() - e.getYCord();
 		
 		double dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 		
-		int m = y/x;
+		float m = y/x;
 		if(dist < sight){
 			for(int i = 0; i < dist; i++){
 				int x1 = (int)getXCord() + i;
@@ -203,19 +200,9 @@ public abstract class EntityLiving extends EntitySaveable {
 	public boolean isSolid() {
 		return true;
 	}
-	
-	public String toFile(){
-		return super.toFile() + "&" + health + "&" + heal.x + "&" + heal.y;
-	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		model.paintComponent(g, Frame.game);
-	}
-	
-	protected void fromFile(String[] args){
-		super.fromFile(args);
-		health = Integer.parseInt(args[4]);
-		heal = new Point(Integer.parseInt(args[5]), Integer.parseInt(args[6]));
 	}
 }

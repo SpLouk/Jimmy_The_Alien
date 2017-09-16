@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -7,7 +7,7 @@ public abstract class Object {
 
 	protected byte paintLevel;
 	private static byte topPaintLevel;
-	protected int x = 0, y = 0, xCord2, yCord2;
+	protected int x = 0, y = 0;
 	protected short width = 0, height = 0;
 	protected boolean onScreen = false;
 

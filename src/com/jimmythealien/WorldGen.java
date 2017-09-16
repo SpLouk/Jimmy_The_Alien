@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.util.Random;
 
@@ -59,10 +59,10 @@ public class WorldGen {
 		for (int i = 0; i < GameData.instance().blockList.size(); i++) {
 			Block b = GameData.instance().blockList.get(i);
 			if (b.isTop() && b.getBlockType().equals("Dirt")) {
-				if (r.nextInt(12) == 0) {
-					EntityTree e = new EntityTree(b);
+				if (r.nextInt(4) == 0) {
+					// EntityTree e = new EntityTree(b);
 					BlockDirt c = (BlockDirt) b;
-					c.growFlora(false, e);
+					c.growGrass(false);
 				} else {
 					BlockDirt c = (BlockDirt) b;
 					c.growGrass(false);
@@ -75,7 +75,7 @@ public class WorldGen {
 
 		for (int i = 0; i < GameData.rightBound; i++) {
 			for (int a = 0; a < GameData.worldHeight; a++) {
-				BlockAir.create(i, a, false);
+				BlockAir.create(i, a, true);
 			}
 		}
 	}

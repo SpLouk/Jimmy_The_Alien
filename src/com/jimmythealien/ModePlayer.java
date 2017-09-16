@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -180,17 +180,6 @@ public class ModePlayer extends Mode {
 	public void paintComponent(Graphics g) {
 
 		focus.hud.paintComponent(g);
-	}
-	
-	public static void findPlayer() {
-		for(int i = 0; i < GameData.instance().entityList.size(); i++){
-			Entity e = GameData.instance().entityList.get(i);
-			if(e instanceof EntitySentient){
-				Frame.game.m = new ModePlayer((EntitySentient)e);
-				return;
-			}
-		}
-		Frame.game.m = new ModeFreeRoam();
 	}
 
 }

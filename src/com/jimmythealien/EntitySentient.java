@@ -1,8 +1,8 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.Point;
 
-public abstract class EntitySentient extends EntityLiving {
+public class EntitySentient extends EntityLiving {
 
 	protected boolean isPlayer = false;
 	protected Inventory inventory;
@@ -50,30 +50,13 @@ public abstract class EntitySentient extends EntityLiving {
 		return isPlayer;
 	}
 	
-	public String toFile(){
-		if(isPlayer()){
-			return super.toFile() + inventory.toFile() + "&p";
-		} else {
-			return super.toFile() + inventory.toFile() + "&n";
-		}
-	}
-	
-	protected void fromFile(String[] args){
-		super.fromFile(args);
-		inventory.fromFile(args[7]);
-		if(args[8] == "p"){
-			isPlayer = true;
-		}
-		
-	}
-	
 	protected void kill() {
 
 		remove();
 		inventory.getSelectedSlot().tool.remove();
 
 		if (isPlayer()) {
-			ModePlayer.findPlayer();
+			Frame.game.m = new ModeFreeRoam();
 		}
 
 	}

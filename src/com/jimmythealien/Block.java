@@ -1,4 +1,4 @@
-package com.jimmythealien.src;
+package jimmyTheAlien;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -11,10 +11,11 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public abstract class Block extends Object {
-	
+
+	private static boolean init = false;
 	protected static BufferedImage terrainMap;
 	protected static final Block[] blocks = { new BlockDirt(),
-			new BlockStone(), new BlockHardRock()};
+			new BlockStone(), new BlockHardRock() };
 
 	private byte lightValue;
 	private short xCord, yCord;
@@ -22,18 +23,21 @@ public abstract class Block extends Object {
 	protected BufferedImage b1;
 	protected GradientPaint gp, gp1;
 
-	static {
-		try {
-			terrainMap = ImageIO.read(GameData.instance().getClass().getResource(
-					"/Resources/TerrainMap.png"));
-		} catch (Exception e) {
-		}
-	}
-	
 	public Block() {
 		setSize(60, 60);
 		GameData.instance().blockList.add(this);
 		setPaintLevel((byte) 3);
+
+		if (!init) {
+
+			try {
+				terrainMap = ImageIO.read(getClass().getResource(
+						"/Resources/TerrainMap.png"));
+			} catch (Exception e) {
+			}
+			init = true;
+		}
+
 	}
 
 	public abstract int getHardness();
@@ -58,7 +62,8 @@ public abstract class Block extends Object {
 			if (BlockAir.collision(xCord, yCord)) {
 				BlockAir.getBlock(xCord, yCord).remove();
 			}
-			blocks[i].newBlock(xCord, yCord);
+			Block b = blocks[i].newBlock(xCord, yCord);
+			b.load(b1);
 			return true;
 		} else {
 			return false;
@@ -74,9 +79,7 @@ public abstract class Block extends Object {
 			}
 
 			Block b = block.newBlock(xCord, yCord);
-			if(b1){
-				b.load();
-			}
+			b.load(b1);
 			return true;
 		} else {
 			return false;
@@ -272,9 +275,7 @@ public abstract class Block extends Object {
 
 	public void setCoordinates(short x, short y) {
 		xCord = x;
-		xCord2 = x*60;
 		yCord = y;
-		xCord2 = y*60;
 	}
 
 	public short getXCord() {
@@ -336,10 +337,12 @@ public abstract class Block extends Object {
 		}
 	}
 
-	public void load() {
+	public void load(boolean light) {
 		setLocation(Frame.game.m.cordToPos(this.getXCord(), this.getYCord()));
-		
-		initLight();
+
+		if (light) {
+			initLight();
+		}
 	}
 
 	public static boolean collision(int xCord, int yCord, boolean b) {
