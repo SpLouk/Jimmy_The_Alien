@@ -21,7 +21,6 @@ public abstract class Entity extends Object {
 
 	public void onUpdate() {
 		if (yCord < 0) {
-			System.out.println(yCord);
 		}
 	}
 

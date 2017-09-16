@@ -178,7 +178,6 @@ public abstract class EntityLiving extends EntityObject {
 			for(int i = 0; i < dist; i++){
 				int x1 = (int)getXCord() + i;
 				int y1 = (int)(getYCord() + (m*i));
-				System.out.println(x1 + ", " + y1);
 				if(GameData.instance().blockMap[x1][y1] != null){
 					return false;
 				}

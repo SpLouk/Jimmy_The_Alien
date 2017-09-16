@@ -110,7 +110,6 @@ public class EntityTree extends EntityObject {
 		g.setColor(new Color(102, 85, 0));
 
 		for (int i = 0; i < lPoint.size(); i++) {
-			System.out.println("width: " + (rPoint.get(i).x - lPoint.get(i).x));
 			g.fillRect(lPoint.get(i).x, lPoint.get(i).y * 5, rPoint.get(i).x, 5);
 		}
 	}
@@ -118,7 +117,6 @@ public class EntityTree extends EntityObject {
 	public int getHeight() {
 
 		int i = lPoint.get(0).y, i2 = lPoint.get(lPoint.size() - 1).y;
-		System.out.println((i2 - i) * 5);
 		return (i2 - i) * 5;
 	}
 
